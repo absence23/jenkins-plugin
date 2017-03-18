@@ -11,12 +11,9 @@ public class ScriptRunner implements AutoCloseable{
     private static final String KERNEL_LINK = "\\MathKernel.exe";
     private static final String JLINK_PATH = "\\SystemFiles\\Links\\JLink";
     private static final String LAUNCH_LINK = "-linkmode launch -linkname '%s'";
-    private static ScriptRunner scriptRunner;
-    private String mathematicaHome;
     private KernelLink kernelLink;
 
     public ScriptRunner(String mathematicaHome) throws MathLinkException {
-        this.mathematicaHome = mathematicaHome;
         System.setProperty("com.wolfram.jlink.libdir", mathematicaHome + JLINK_PATH);
         kernelLink = MathLinkFactory.createKernelLink(String.format(LAUNCH_LINK, mathematicaHome + KERNEL_LINK));
     }
@@ -54,6 +51,8 @@ public class ScriptRunner implements AutoCloseable{
     }
 
     public void close() {
-        kernelLink.close();
+        if (kernelLink != null) {
+            kernelLink.close();
+        }
     }
 }
